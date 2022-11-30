@@ -6,6 +6,7 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	connection "github.com/ogbiyoyosky/travex/db"
 	"github.com/ogbiyoyosky/travex/routes"
 )
@@ -16,8 +17,13 @@ func main() {
 
 	connection.Connect()
 	app := fiber.New()
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 	routes.SetupRoutes(app)
 	// start the server
+
+	//seed.RunSeedData()
 	go func() {
 		l.Println("Starting server on port 9090")
 

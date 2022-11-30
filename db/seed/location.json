@@ -1,0 +1,87 @@
+{
+    "locations": [
+        {
+            "name": "Daytona Tamworth",
+            "address": "Tamworth",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/ph…/07/fd/0a/c6/daytona-tamworth.jpg?w=1800&h=-1&s=1",
+            "description": "The Midland's premier kart circuit. Daytona Tamworth is a 1000+ metre multi layout outdoor tarmac circuit just five minutes from the M42 (J10). With Bambino, Junior and Senior karts for private and public events."
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        },
+        {
+            "name": "Ember Lon",
+            "address": "Staffordshire University",
+            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
+            "description": "An Event Center in staffordshire University"
+        }
+
+    ],
+    "users": [
+        {
+            "first_name": "Emmanuel",
+            "last_name": "Ogbiyoyo",
+            "email": "ogbiyoyosky@gmail.com",
+            "password": "Miracle123",
+            "role": "customer"
+        },
+        {
+            "first_name": "Freeman",
+            "last_name": "Ogbiyoyo",
+            "email": "freeman@gmail.com",
+            "password": "Miracle123",
+            "role": "admin"
+        }
+    ],
+    "locationTypes": [
+        {
+            "name": "park"
+        },
+        {
+            "name": "restaurant"
+        },
+        {
+            "name": "club"
+        }
+
+    ]
+}

@@ -1,4 +1,6 @@
 
+include .env
+
 confirm:
 	@echo -n "Are you sure? [y/N] " && read ans && [ $${ans:-N} = y ]
 
@@ -6,7 +8,10 @@ confirm:
 # BUILD
 # ============================================================================= #
 build:
-	go build -o pera ./cmd/*.go
+	go build -o travex ./cmd/*.go
+
+start:
+	go run ./cmd/*.go
 
 # ============================================================================= #
 # QUALITY CONTROL
@@ -24,10 +29,15 @@ audit: vendor
 
 migrateup: 
 	 @echo 'Running up migrations...'
-	 migrate -path db/migrations -database "postgresql://postgres:password@localhost:15432/travex?sslmode=disable" -verbose up 
+	migrate -path db/migrations -database ${POSTGRES_URL} -verbose up 
+
+seed: 
+	 @echo 'Running up seeds..'
+	 migrate -path db/seed -database ${POSTGRES_URL} -verbose up 
+	 go run ./db/seed/*.go
 
 migratedown: 
-	 migrate -path db/migrations -database "postgresql://postgres:password@localhost:15432/travex?sslmode=disable" -verbose down
+	 migrate -path db/migrations -database {POSTGRES_URL} -verbose down
 
 
-.PHONY: migrateup migratedown audit build
+.PHONY: migrateup migratedown audit build start seed
