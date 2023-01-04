@@ -20,12 +20,6 @@ func AddComment(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if userObj.Role != "admin" {
-		return c.JSON(fiber.Map{
-			"status":  false,
-			"message": "UnAuthorized",
-		})
-	}
 
 	var comment models.Comment
 
@@ -41,16 +35,57 @@ func AddComment(c *fiber.Ctx) error {
 		})
 	}
 
-	comment = models.Comment{
-		Location_id: locationId,
-		Text:        data.Text,
-		Author_id:   userObj.Id,
+	commentParentId := data.Parent_id
+
+	if commentParentId != "" {
+		connection.DB.Model(&comment).Where("id = ?", commentParentId).First(&comment)
+
+		if comment.Id == "" {
+
+			c.Status(http.StatusNotFound)
+			return c.JSON(fiber.Map{
+				"status":  false,
+				"message": "Can not reply to a comment that does not exist",
+			})
+		}
+
+		comment = models.Comment{
+			Location_id: locationId,
+			Text:        data.Text,
+			Author_id:   userObj.Id,
+			Parent_id:   commentParentId,
+		}
+
+		if userObj.Role != "admin" {
+			connection.DB.Omit("is_approved_at", "is_approved_by").Create(&comment)
+
+		} else {
+			comment.IsApproved = true
+			comment.IsApprovedAt = time.Now()
+			comment.IsApprovedBy = userObj.Id
+
+			connection.DB.Save(&comment)
+		}
+
+	} else {
+		comment = models.Comment{
+			Location_id: locationId,
+			Text:        data.Text,
+			Author_id:   userObj.Id,
+		}
+
+		if userObj.Role != "admin" {
+			connection.DB.Omit("is_approved_at", "is_approved_by", "parent_id").Create(&comment)
+
+		} else {
+			comment.IsApproved = true
+			comment.IsApprovedAt = time.Now()
+			comment.IsApprovedBy = userObj.Id
+
+			connection.DB.Omit("location_id, author_id", "parent_id").Save(&comment)
+		}
+
 	}
-
-	fmt.Println("locationId", locationId)
-	fmt.Println("userObj.Id", userObj.Id)
-
-	connection.DB.Omit("is_approved_at", "is_approved_by").Create(&comment)
 
 	return c.JSON(fiber.Map{
 		"status":  true,
@@ -74,6 +109,14 @@ func ApproveComment(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"status":  false,
 			"message": "Location does not exist",
+		})
+	}
+
+	if location.UserId != userObj.Id {
+		c.Status(http.StatusForbidden)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "You don't have the permission to carry out this operation",
 		})
 	}
 

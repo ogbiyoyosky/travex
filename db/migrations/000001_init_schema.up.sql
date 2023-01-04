@@ -47,6 +47,7 @@ create table "comments" (
     "id" uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     "location_id" uuid NOT NULL,
     "author_id" uuid NOT NULL,
+    "parent_id" uuid DEFAULT null,
     "text" text NOT NULL,
     "is_approved" boolean NOT NULL DEFAULT FALSE,
     "is_approved_by" uuid DEFAULT  NULL,

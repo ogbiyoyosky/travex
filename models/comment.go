@@ -10,6 +10,7 @@ type Comment struct {
 	Id           string    `gorm:"Column:id"`
 	Location_id  string    `gorm:"Column:location_id"`
 	Author_id    string    `gorm:"column:author_id"`
+	Parent_id    string    `gorm:"column:parent_id"`
 	Text         string    `gorm:"Column:text"`
 	IsApproved   bool      `gorm:"Column:is_approved"`
 	IsApprovedBy string    `gorm:"Column:is_approved_by"`

@@ -22,6 +22,12 @@ type Location struct {
 	Comments         []Comment `gorm:"foreignKey:location_id;references:id"`
 }
 
+type TestLocation struct {
+	Id        string `gorm:"column:id"`
+	Text      string
+	Parent_id string
+}
+
 func (u *Location) BeforeCreate(tx *gorm.DB) (err error) {
 	u.Created_at = time.Now()
 	u.Updated_at = time.Now()

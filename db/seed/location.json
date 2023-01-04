@@ -1,60 +1,79 @@
 {
     "locations": [
         {
-            "name": "Daytona Tamworth",
-            "address": "Tamworth",
-            "image": "https://dynamic-media-cdn.tripadvisor.com/media/ph…/07/fd/0a/c6/daytona-tamworth.jpg?w=1800&h=-1&s=1",
-            "description": "The Midland's premier kart circuit. Daytona Tamworth is a 1000+ metre multi layout outdoor tarmac circuit just five minutes from the M42 (J10). With Bambino, Junior and Senior karts for private and public events."
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        },
-        {
-            "name": "Ember Lon",
-            "address": "Staffordshire University",
-            "image": "https://blogs.staffs.ac.uk/student-blogs/files/2016/10/Ember001.jpg",
-            "description": "An Event Center in staffordshire University"
-        }
 
+            "name": " Middleport Pottery",
+            "address": " Port St, Burslem, Middleport",
+            "image": " https://d16zhuza4xzjgx.cloudfront.net/plonk/8520.../8520605851dd04c5d2bedd056708f045a6dc702b78e22d6f91b5386925087755-large.jpg",
+            "description": " Middleport Pottery, situated on the Trent and Mersey Canal in Stoke-on-Trent, was built by Burgess and Leigh in the late nineteenth century"
+        },
+        {
+            "name": "Weston Park",
+            "address": "Weston-under-Lizard, Staffordshire",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/7c/86/de/nati",
+            "description": "Weston Park is a beautiful county house nestled in Weston-under-Lizard and set in 1,000 acres of parkland. The Weston Park Hall is a 17th-century listed building, complete with an orangery and stables"
+        },
+        {
+            "name": "National Memorial Arboretum",
+            "address": "Croxall Rd, Burton-on-Trent DE13 7AR",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/7c/86/de/national-memorial-arboretum.jpg?w=1100&h=-1&s=1",
+            "description": "The National Memorial Arboretum is a British site of national remembrance at Alrewas, near Lichfield, Staffordshire. Its objective is to honour the fallen, recognise service and sacrifice, and foster pride in the British Armed Forces and civilian community."
+        },
+        {
+            "name": "Alton Towers Waterpark",
+            "address": "Cleveland Rd,",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/03/ff/82/bd/alton-towers-waterpark.jpg?w=1200&h=-1&s=1",
+            "description": "The Waterpark is a perfect family day out whatever the weather, with both indoor and outdoor pools and attractions offering gallons of excitement for kids of all ages. "
+        },
+        {
+            "name": "Hanley Park",
+            "address": "Cleveland Rd,",
+            "image": "https://eu-assets.simpleview-europe.com/stoke/imageresizer/?image=%2Fdmsimgs%2F20200912_142438_2120138501.jpg&action=ProductDetailNew",
+            "description": "Hanley Park is one of the city's heritage parks. It is close to both the City Centre and the railway station."
+        },
+        {
+            "name": "Lichfield",
+            "address": "WS13 6AA Dam Street ,",
+            "image": "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcQ5ESBePA0Xk_62sT-k90Uz4IyOeQChIHmLioqt37tE4ZoIrtir4JVv6kVdiKSD_IFQ",
+            "description": "Lichfield is a cathedral city and civil parish in Staffordshire."
+        },
+        {
+            "name": "Alton Towers Resort",
+            "address": "Farley Ln, Alton, Stoke-on-Trent ST10 4DB",
+            "image": "https://www.altontowers.com/media/lmwbrrjc/ath-exterior.jpg",
+            "description": "England's largest theme park offers 500 acres of attractions and rides the whole family can enjoy including X-Sector, Forbidden Valley, Dark Forest, Gloomy Wood, Katanga Canyon and CBeebies Land!"
+        },
+        {
+            "name": "Gladstone Pottery Museum",
+            "address": "Uttoxeter Rd, Longton, Stoke-on-Trent ST3 1PQ",
+            "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/6f/ec/54/a-view-of-the-old-bottle.jpg?w=1200&h=-1&s=1",
+            "description": "Gladstone is the only complete Victorian pottery factory from the days when coal burning ovens made the world's finest bone china. Traditional skills, original workshops, and the cobbled yard and huge bottle ovens transport visitors back in time."
+        },
+        {
+            "name": "The Market Vaults",
+            "address": "4 St. Martins Place, Stafford ST16 2LA England",
+            "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/a5/02/93/the-market-vaults.jpg",
+            "description": "Vegetarian Friendly restaurant.Main meals -Lunch, Dinner, Drinks.Special attraction : CUISINES - American, Bar, Pub. Features included - Seating, Wheelchair Accessible, Serves Alcohol, Full Bar, Accepts Mastercard, Accepts Visa, Digital Payments, Free Wifi, Live Music Gladstone is the only complete Victorian pottery factory from the days when coal burning ovens made the world's finest bone china. Traditional skills, original workshops, and the cobbled yard and huge bottle ovens transport visitors back in time."
+        },
+        {
+
+            "name": "Ayo Gorkhali",
+            "address": "Uttoxeter Rd, Longton, Stoke-on-Trent ST3 1PQ",
+            "image": "https://media-cdn.tripadvisor.com/media/photo-s/11/e5/a2/14/brand-logo.jpg",
+            "description": "Vegetarian Friendly restaurant,Vegan Options, Gluten Free Options.Main meals -Dinner, Drinks.CUISINES - American, Bar, Pub. Features included - Delivery, Takeout, Reservations, Seating, Highchairs Available, Wheelchair Accessible, Serves Alcohol, Full Bar, Table Service."
+        },
+        {
+            "name": "Dubberley Delicious",
+            "address": "Stafford Road, Lichfield WS13 8JA England",
+            "image": "https://media-cdn.tripadvisor.com/media/photo-s/23/2e/44/3c/private-chef.jpg",
+            "description": "Vegetarian Friendly restaurant,Vegan Options, Gluten Free Options.Main meals -Dinner, Drinks.CUISINES - British. Features included -Reservations, Outdoor Seating, Private Dining, Seating, Parking Available, Wheelchair Accessible, Serves Alcohol, Accepts Credit Cards, Table Service, Wine and Beer, Non-smoking restaurants, Gift Cards Available"
+        },
+        {
+            "name": "The Slamwich Club",
+            "address": "No.63 Piccadilly, Hanley, Stoke-on-Trent ST1 1HR England",
+            "image": "https://media-cdn.tripadvisor.com/media/photo-s/1b/bc/b6/98/cod-off.jpg",
+            "description": "Vegetarian Friendly restaurant,Vegan Options.Main meals -Dinner, Drinks.CUISINES - American, British. Features included - Delivery, Takeout, Reservations, Seating, Highchairs Available, Wheelchair Accessible"
+        }
     ],
     "users": [
         {

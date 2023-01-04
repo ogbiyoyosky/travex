@@ -33,6 +33,14 @@ func AddReview(c *fiber.Ctx) error {
 		})
 	}
 
+	if location.UserId == userObj.Id {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "you can't add a review for your location you created",
+		})
+	}
+
 	connection.DB.Where("author_id = ? AND location_id = ?", userObj.Id, locationId).First(&review)
 
 	fmt.Println("data.Rating", data.Rating/10)
