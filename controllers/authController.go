@@ -40,12 +40,31 @@ func Register(c *fiber.Ctx) error {
 
 	connection.DB.Create(&user)
 
+	//generate JWT token
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    user.Id,
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	token, error := claims.SignedString([]byte("secret"))
+
+	if error != nil {
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "internal server error",
+		})
+	}
+
 	c.Status(http.StatusCreated)
 
 	return c.JSON(fiber.Map{
 		"status":  true,
 		"message": "successfully created a user",
-		"data":    user,
+		"data": fiber.Map{
+			"token": token,
+			"user":  user,
+		},
 	})
 
 }
