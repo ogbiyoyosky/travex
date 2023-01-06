@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	connection "github.com/ogbiyoyosky/travex/db"
+	"github.com/ogbiyoyosky/travex/dto"
 	"github.com/ogbiyoyosky/travex/models"
 )
 
@@ -60,4 +61,43 @@ func GetLocation(c *fiber.Ctx) error {
 		"message": "Successfully retrieved location",
 		"data":    location,
 	})
+}
+
+func AddLocation(c *fiber.Ctx) error {
+	var data dto.CreateLocationDto
+	userObj := c.Locals("user").(models.User)
+
+	var location models.Location
+	var locationType models.LocationType
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	connection.DB.Where("name = ? ", data.LocationType).First(&locationType)
+
+	if locationType.Id == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "LocationType does not exist",
+		})
+	}
+
+	location = models.Location{
+		Name:             data.Name,
+		Image:            data.Image,
+		Address:          data.Address,
+		Location_type_id: locationType.Id,
+		Description:      data.Description,
+		UserId:           userObj.Id,
+	}
+
+	connection.DB.Create(&location)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Successfully created Location",
+	})
+
 }
