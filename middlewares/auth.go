@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -11,9 +12,34 @@ import (
 )
 
 func ValidateJwt(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
+	//cookie := c.Cookies("jwt")
 
-	token, error := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
+	auth := c.Get("Authorization")
+
+	fmt.Println("TES " + auth)
+
+	if auth == "" {
+
+		c.Status(http.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthorized",
+			"status":  false,
+		})
+
+	}
+
+	authArr := strings.Fields(auth)
+
+	if len(authArr) == 0 {
+
+		c.Status(http.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthorized",
+			"status":  false,
+		})
+	}
+
+	token, error := jwt.ParseWithClaims(authArr[1], &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})
 

@@ -23,9 +23,13 @@ type Location struct {
 }
 
 type TestLocation struct {
-	Id        string `gorm:"column:id"`
-	Text      string
-	Parent_id string
+	Id               string    `gorm:"column:id"`
+	Name             string    `gorm:"column:name"`
+	Image            string    `gorm:"column:image"`
+	Address          string    `gorm:"column:address"`
+	Description      string    `gorm:"column:description"`
+	Location_type_id string    `gorm:"column:location_type_id"`
+	UserId           string    `gorm:"column:user_id"`
 }
 
 func (u *Location) BeforeCreate(tx *gorm.DB) (err error) {

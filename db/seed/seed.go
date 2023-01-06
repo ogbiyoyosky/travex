@@ -14,11 +14,12 @@ import (
 
 type SeedData struct {
 	Users         []models.User
-	Locations     []models.Location
+	Locations     []models.TestLocation
 	LocationTypes []models.Location
 }
 
 func main() {
+	fmt.Println("--------------------------------")
 	RunSeedData()
 }
 
@@ -36,11 +37,19 @@ func RunSeedData() {
 	}
 	defer file.Close()
 
+	fmt.Println("--------------------------------")
+
 	if err := json.NewDecoder(file).Decode(&seed); err != nil {
+
+		fmt.Println("--------------------------------")
 		locationTypeIds := make([]string, 0)
 		userIds := make([]string, 0)
+
+		fmt.Println(userIds)
+		fmt.Println("--------------------------------")
+
 		for i := 0; i < len(seed.LocationTypes); i++ {
-			fmt.Println("Name: ", seed.LocationTypes[i].Name)
+
 			locationType := models.LocationType{Name: seed.LocationTypes[i].Name}
 			connection.DB.Create(&locationType)
 			locationTypeIds = append(locationTypeIds, locationType.Id)
@@ -59,7 +68,7 @@ func RunSeedData() {
 			randomIndexLocationType := rand.Intn(len(locationTypeIds))
 
 			randomIndexUserId := rand.Intn(len(userIds))
-			location := models.Location{Name: seed.Locations[i].Name, Location_type_id: locationTypeIds[randomIndexLocationType], Description: seed.Locations[i].Description, UserId: userIds[randomIndexUserId], Image: seed.Locations[i].Image}
+			location := models.TestLocation{Name: seed.Locations[i].Name, Location_type_id: locationTypeIds[randomIndexLocationType], Description: seed.Locations[i].Description, UserId: userIds[randomIndexUserId], Image: seed.Locations[i].Image, Address: seed.Locations[i].Address}
 			connection.DB.Create(&location)
 		}
 	}
