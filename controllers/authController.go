@@ -62,8 +62,8 @@ func Register(c *fiber.Ctx) error {
 		"status":  true,
 		"message": "successfully created a user",
 		"data": fiber.Map{
-			"token": token,
-			"user":  user,
+			"accessToken": token,
+			"user":        user,
 		},
 	})
 

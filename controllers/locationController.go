@@ -37,6 +37,35 @@ func GetLocations(c *fiber.Ctx) error {
 	})
 }
 
+func MyLocations(c *fiber.Ctx) error {
+	var locations []models.Location
+
+	userObj := c.Locals("user").(models.User)
+
+	var search = c.Query("search")
+
+	if search != "" {
+
+		connection.DB.Model(&models.Location{}).Where("name ILIKE ?", "%"+search+"%").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Where("user_id = ?", userObj.Id).Find(&locations)
+		c.Status(http.StatusOK)
+		fmt.Println("locations", locations)
+		return c.JSON(fiber.Map{
+			"status":  true,
+			"message": "Successfully retrieved locations",
+			"data":    locations,
+		})
+	}
+
+	connection.DB.Model(&models.Location{}).Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("LocationType").Preload("Reviews.Author").Where("user_id = ?", userObj.Id).Find(&locations)
+	c.Status(http.StatusOK)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Successfully retrieved locations",
+		"data":    locations,
+	})
+}
+
 func GetLocation(c *fiber.Ctx) error {
 	var location models.Location
 	//var testLocation models.TestLocation
