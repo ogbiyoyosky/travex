@@ -92,6 +92,30 @@ func GetLocation(c *fiber.Ctx) error {
 	})
 }
 
+func GetAdminLocation(c *fiber.Ctx) error {
+	var location models.Location
+	//var testLocation models.TestLocation
+	var locationId = c.Params("locationId")
+
+	connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", false).Preload("Reviews.Author").Preload("User").First(&location)
+	connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
+
+	if location.Id == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "Location does not exist",
+		})
+	}
+	c.Status(http.StatusOK)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Successfully retrieved location",
+		"data":    location,
+	})
+}
+
 func AddLocation(c *fiber.Ctx) error {
 	var data dto.CreateLocationDto
 	userObj := c.Locals("user").(models.User)

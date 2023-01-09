@@ -14,6 +14,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/api/logout", controller.Logout)
 	app.Get("/api/locations", controller.GetLocations)
 	app.Get("/api/locations/:locationId", middleware.ValidateJwt, controller.GetLocation)
+	app.Get("/api/admin/locations/:locationId", middleware.ValidateJwt, controller.GetAdminLocation)
 	app.Get("/api/profile/locations", middleware.ValidateJwt, controller.MyLocations)
 	app.Post("/api/locations", middleware.ValidateJwt, controller.AddLocation)
 	app.Post("/api/locations/:locationId/reviews", dto.ReviewValidator, middleware.ValidateJwt, controller.AddReview)
