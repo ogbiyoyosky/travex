@@ -46,7 +46,7 @@ func MyLocations(c *fiber.Ctx) error {
 
 	if search != "" {
 
-		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Where("user_id = ?", userObj.Id).Find(&locations)
+		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("Reviews.Comment").Preload("LocationType").Where("user_id = ?", userObj.Id).Find(&locations)
 		c.Status(http.StatusOK)
 		fmt.Println("locations", locations)
 		return c.JSON(fiber.Map{
@@ -74,12 +74,11 @@ func GetLocation(c *fiber.Ctx) error {
 	var locationId = c.Params("locationId")
 
 	if userObj.Role == "admin" {
-		fmt.Println("I got here")
-		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments").Preload("Reviews.Author").Preload("User").First(&location)
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments").Preload("Reviews.Author").Preload("Reviews.Comment").Preload("User").First(&location)
 		//connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
 
 	} else {
-		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("User").First(&location)
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("Reviews.Comment").Preload("User").First(&location)
 	}
 
 	// connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)

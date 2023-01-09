@@ -55,21 +55,35 @@ func AddReview(c *fiber.Ctx) error {
 		})
 	}
 
-	review = models.Review{
-		Location_id: locationId,
-		Rating:      float32(data.Rating) / 10,
-		Author_id:   userObj.Id,
+	if data.Comment != "nil" {
+		comment = models.Comment{
+			Location_id: locationId,
+			Text:        data.Comment,
+			Author_id:   userObj.Id,
+		}
+
+		connection.DB.Omit("is_approved", "is_approved_by", "is_approved_at", "parent_id").Save(&comment)
 	}
 
-	connection.DB.Create(&review)
+	if data.Comment != "" {
+		review = models.Review{
+			Location_id: locationId,
+			Rating:      float32(data.Rating) / 10,
+			Author_id:   userObj.Id,
+			Comment_id:  comment.Id,
+		}
 
-	comment = models.Comment{
-		Location_id: locationId,
-		Text:        data.Comment,
-		Author_id:   userObj.Id,
+		connection.DB.Create(&review)
+	} else {
+		review = models.Review{
+			Location_id: locationId,
+			Rating:      float32(data.Rating) / 10,
+			Author_id:   userObj.Id,
+			Comment_id:  comment.Id,
+		}
+
+		connection.DB.Omit("comment_id").Save(&review)
 	}
-
-	connection.DB.Omit("is_approved", "is_approved_by", "is_approved_at", "parent_id").Save(&comment)
 
 	return c.JSON(fiber.Map{
 		"status":  true,

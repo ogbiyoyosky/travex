@@ -41,6 +41,7 @@ create table "reviews" (
     "created_at" timestamp  DEFAULT NOW(),
     "updated_at" timestamp DEFAULT NOW(),
     "deleted_at "timestamp
+    "comment_id" uuid DEFAULT NULL,
 );
 
 create table "comments" (

@@ -13,7 +13,9 @@ type Review struct {
 	Rating      float32   `gorm:"Column:rating"`
 	Created_at  time.Time `gorm:"Column:created_at"`
 	Updated_at  time.Time `gorm:"Column:updated_at"`
+	Comment_id  string    `gorm:"Column:comment_id"`
 	Author      User
+	Comment     Comment
 }
 
 func (u *Review) BeforeCreate(tx *gorm.DB) (err error) {
