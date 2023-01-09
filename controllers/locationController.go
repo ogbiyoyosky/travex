@@ -74,14 +74,15 @@ func GetLocation(c *fiber.Ctx) error {
 	var locationId = c.Params("locationId")
 
 	if userObj.Role == "admin" {
-		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "parent_id = NULL").Preload("Reviews.Author").Preload("User").First(&location)
+		fmt.Println("I got here")
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments").Preload("Reviews.Author").Preload("User").First(&location)
+		//connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
+
 	} else {
 		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("User").First(&location)
 	}
 
 	// connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
-
-	fmt.Println(location)
 
 	if location.Id == "" {
 		c.Status(http.StatusBadRequest)
