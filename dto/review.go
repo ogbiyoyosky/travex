@@ -9,7 +9,7 @@ import (
 
 type ReviewDto struct {
 	Rating  uint16 `json:"rating" validate:"required,min=1,max=10"`
-	Comment string `json:"comment" validate:"required"`
+	Comment string `json:"comment"`
 }
 
 func ReviewValidator(c *fiber.Ctx) error {
