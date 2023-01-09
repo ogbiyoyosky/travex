@@ -17,7 +17,7 @@ func GetLocations(c *fiber.Ctx) error {
 
 	if search != "" {
 
-		connection.DB.Model(&models.Location{}).Where("name ILIKE ?", "%"+search+"%").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Find(&locations)
+		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Find(&locations)
 		c.Status(http.StatusOK)
 		fmt.Println("locations", locations)
 		return c.JSON(fiber.Map{
@@ -46,7 +46,7 @@ func MyLocations(c *fiber.Ctx) error {
 
 	if search != "" {
 
-		connection.DB.Model(&models.Location{}).Where("name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Where("user_id = ?", userObj.Id).Find(&locations)
+		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("LocationType").Where("user_id = ?", userObj.Id).Find(&locations)
 		c.Status(http.StatusOK)
 		fmt.Println("locations", locations)
 		return c.JSON(fiber.Map{
