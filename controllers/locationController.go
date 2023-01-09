@@ -68,11 +68,18 @@ func MyLocations(c *fiber.Ctx) error {
 
 func GetLocation(c *fiber.Ctx) error {
 	var location models.Location
+
+	userObj := c.Locals("user").(models.User)
 	//var testLocation models.TestLocation
 	var locationId = c.Params("locationId")
 
-	connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("User").First(&location)
-	connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
+	if userObj.Role == "admin" {
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "parent_id = NULL").Preload("Reviews.Author").Preload("User").First(&location)
+	} else {
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "is_approved NOT IN (?)", false).Preload("Reviews.Author").Preload("User").First(&location)
+	}
+
+	// connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
 
 	fmt.Println(location)
 
@@ -97,7 +104,7 @@ func GetAdminLocation(c *fiber.Ctx) error {
 	//var testLocation models.TestLocation
 	var locationId = c.Params("locationId")
 
-	connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", false).Preload("Reviews.Author").Preload("User").First(&location)
+	//connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", false).Preload("Reviews.Author").Preload("User").First(&location)
 	connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
 
 	if location.Id == "" {
