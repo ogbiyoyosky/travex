@@ -69,7 +69,7 @@ func AddReview(c *fiber.Ctx) error {
 		Author_id:   userObj.Id,
 	}
 
-	connection.DB.Omit("location_id, author_id", "parent_id").Save(&comment)
+	connection.DB.Omit("is_approved", "is_approved_by", "is_approved_at", "parent_id").Save(&comment)
 
 	return c.JSON(fiber.Map{
 		"status":  true,
