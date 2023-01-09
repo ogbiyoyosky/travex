@@ -9,6 +9,7 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Post("/api/register", dto.RegisterValidator, controller.Register)
+	app.Post("/api/business/register", dto.RegisterValidator, controller.AdminRegister)
 	app.Post("/api/login", dto.LoginValidator, controller.Login)
 	app.Post("/api/logout", controller.Logout)
 	app.Get("/api/locations", controller.GetLocations)

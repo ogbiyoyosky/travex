@@ -69,6 +69,64 @@ func Register(c *fiber.Ctx) error {
 
 }
 
+func AdminRegister(c *fiber.Ctx) error {
+
+	var data dto.RegisterDto
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	hashPassword := models.HashPassword(data.Password)
+	user := models.User{
+		First_name: data.FirstName,
+		Last_name:  data.LastName,
+		Email:      data.Email,
+		Password:   hashPassword,
+		Role:       "admin",
+	}
+
+	connection.DB.Where("email = ?", data.Email).First(&user)
+
+	if user.Id != "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "user already exists",
+		})
+	}
+
+	connection.DB.Create(&user)
+
+	//generate JWT token
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    user.Id,
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	token, error := claims.SignedString([]byte("secret"))
+
+	if error != nil {
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "internal server error",
+		})
+	}
+
+	c.Status(http.StatusCreated)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "successfully created a user",
+		"data": fiber.Map{
+			"accessToken": token,
+			"user":        user,
+		},
+	})
+
+}
+
 func Login(c *fiber.Ctx) error {
 	var data dto.RegisterDto
 
