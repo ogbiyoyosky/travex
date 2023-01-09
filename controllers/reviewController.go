@@ -15,6 +15,8 @@ func AddReview(c *fiber.Ctx) error {
 	userObj := c.Locals("user").(models.User)
 	var locationId = c.Params("locationId")
 
+	var comment models.Comment
+
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
@@ -60,6 +62,14 @@ func AddReview(c *fiber.Ctx) error {
 	}
 
 	connection.DB.Create(&review)
+
+	comment = models.Comment{
+		Location_id: locationId,
+		Text:        data.Comment,
+		Author_id:   userObj.Id,
+	}
+
+	connection.DB.Omit("location_id, author_id", "parent_id").Save(&comment)
 
 	return c.JSON(fiber.Map{
 		"status":  true,
