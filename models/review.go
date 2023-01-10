@@ -9,7 +9,7 @@ import (
 type Review struct {
 	Id          string    `gorm:"Column:id"`
 	Location_id string    `gorm:"Column:location_id"`
-	Author_id   string    `gorm:"column:author_id"`
+	Author_id   string    `gorm:"Column:author_id"`
 	Rating      float32   `gorm:"Column:rating"`
 	Created_at  time.Time `gorm:"Column:created_at"`
 	Updated_at  time.Time `gorm:"Column:updated_at"`

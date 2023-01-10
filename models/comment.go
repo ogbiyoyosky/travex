@@ -9,8 +9,8 @@ import (
 type Comment struct {
 	Id           string    `gorm:"Column:id"`
 	Location_id  string    `gorm:"Column:location_id"`
-	Author_id    string    `gorm:"column:author_id"`
-	Parent_id    string    `gorm:"column:parent_id"`
+	Author_id    string    `gorm:"Column:author_id"`
+	Parent_id    string    `gorm:"Column:parent_id"`
 	Text         string    `gorm:"Column:text"`
 	Review_id    string    `gorm:"Column:review_id"`
 	IsApproved   bool      `gorm:"Column:is_approved"`
@@ -19,8 +19,7 @@ type Comment struct {
 	Created_at   time.Time `gorm:"Column:created_at"`
 	Updated_at   time.Time `gorm:"Column:updated_at"`
 	Replies      []Comment
-
-	Author User
+	Author       User
 }
 
 func (u *Comment) BeforeCreate(tx *gorm.DB) (err error) {
