@@ -101,7 +101,7 @@ func AdminRegister(c *fiber.Ctx) error {
 	//generate JWT token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    user.Id,
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		ExpiresAt: time.Now().Add(time.Hour * 300).Unix(),
 	})
 
 	token, error := claims.SignedString([]byte("secret"))
