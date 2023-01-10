@@ -78,7 +78,7 @@ func GetLocation(c *fiber.Ctx) error {
 		//connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
 
 	} else {
-		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "review_id = NULL", false).Preload("Reviews.Author").Preload("Reviews.Comment").Preload("User").First(&location)
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Comments.Author").Preload("User").Preload("Comments", "review_id = NULL").Preload("Reviews.Author").Preload("Reviews.Comment").Preload("User").First(&location)
 	}
 
 	// connection.DB.Raw("SELECT c.text, c.parent_id FROM locations LEFT JOIN comments ON locations.id = comments.location_id LEFT JOIN comments as c ON c.parent_id = comments.id WHERE comments.location_id = ? GROUP BY c.text,c.parent_id", locationId).Scan(&location)
