@@ -12,7 +12,7 @@ type Comment struct {
 	Author_id    string    `gorm:"column:author_id"`
 	Parent_id    string    `gorm:"column:parent_id"`
 	Text         string    `gorm:"Column:text"`
-	Review_id    string    `gorm:"column:parent_id"`
+	Review_id    string    `gorm:"column:review_id"`
 	IsApproved   bool      `gorm:"Column:is_approved"`
 	IsApprovedBy string    `gorm:"Column:is_approved_by"`
 	IsApprovedAt time.Time `gorm:"Column:is_approved_at"`
