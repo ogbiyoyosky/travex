@@ -18,6 +18,7 @@ type Comment struct {
 	IsApprovedAt time.Time `gorm:"Column:is_approved_at"`
 	Created_at   time.Time `gorm:"Column:created_at"`
 	Updated_at   time.Time `gorm:"Column:updated_at"`
+	Replies      []Comment
 
 	Author User
 }
