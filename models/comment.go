@@ -12,12 +12,14 @@ type Comment struct {
 	Author_id    string    `gorm:"column:author_id"`
 	Parent_id    string    `gorm:"column:parent_id"`
 	Text         string    `gorm:"Column:text"`
+	Review_id    string    `gorm:"column:parent_id"`
 	IsApproved   bool      `gorm:"Column:is_approved"`
 	IsApprovedBy string    `gorm:"Column:is_approved_by"`
 	IsApprovedAt time.Time `gorm:"Column:is_approved_at"`
 	Created_at   time.Time `gorm:"Column:created_at"`
 	Updated_at   time.Time `gorm:"Column:updated_at"`
-	Author       User
+
+	Author User
 }
 
 func (u *Comment) BeforeCreate(tx *gorm.DB) (err error) {

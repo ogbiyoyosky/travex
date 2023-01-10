@@ -50,6 +50,7 @@ create table "comments" (
     "author_id" uuid NOT NULL,
     "parent_id" uuid DEFAULT null,
     "text" text NOT NULL,
+    "review_id" uuid DEFAULT NULL,
     "is_approved" boolean NOT NULL DEFAULT FALSE,
     "is_approved_by" uuid DEFAULT  NULL,
     "is_approved_at" timestamp,

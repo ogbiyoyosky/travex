@@ -74,6 +74,8 @@ func AddReview(c *fiber.Ctx) error {
 		}
 
 		connection.DB.Create(&review)
+
+		connection.DB.Model(&comment).Where("id = ?", comment.Id).Update("review_id", review.Id)
 	} else {
 		review = models.Review{
 			Location_id: locationId,
@@ -83,6 +85,7 @@ func AddReview(c *fiber.Ctx) error {
 		}
 
 		connection.DB.Omit("comment_id").Save(&review)
+
 	}
 
 	return c.JSON(fiber.Map{
