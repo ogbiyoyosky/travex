@@ -15,8 +15,6 @@ func AddReview(c *fiber.Ctx) error {
 	userObj := c.Locals("user").(models.User)
 	var locationId = c.Params("locationId")
 
-	var comment models.Comment
-
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
@@ -55,36 +53,26 @@ func AddReview(c *fiber.Ctx) error {
 		})
 	}
 
-	if data.Comment != "nil" {
-		comment = models.Comment{
-			Location_id: locationId,
-			Text:        data.Comment,
-			Author_id:   userObj.Id,
-		}
-
-		connection.DB.Omit("is_approved", "is_approved_by", "is_approved_at", "parent_id").Save(&comment)
-	}
-
 	if data.Comment != "" {
 		review = models.Review{
 			Location_id: locationId,
 			Rating:      float32(data.Rating) / 10,
 			Author_id:   userObj.Id,
-			Comment_id:  comment.Id,
+			Text:        data.Comment,
+			IsApproved:  false,
 		}
 
 		connection.DB.Create(&review)
 
-		connection.DB.Model(&comment).Where("id = ?", comment.Id).Update("review_id", review.Id)
 	} else {
 		review = models.Review{
 			Location_id: locationId,
 			Rating:      float32(data.Rating) / 10,
 			Author_id:   userObj.Id,
-			Comment_id:  comment.Id,
+			IsApproved:  false,
 		}
 
-		connection.DB.Omit("comment_id").Save(&review)
+		connection.DB.Omit("text").Save(&review)
 
 	}
 

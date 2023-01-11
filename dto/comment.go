@@ -8,8 +8,7 @@ import (
 )
 
 type CommentDto struct {
-	Text      string `json:"text" validate:"required"`
-	Parent_id string `json:"parent_id"`
+	Text string `json:"text" validate:"required"`
 }
 
 func CommentValidator(c *fiber.Ctx) error {

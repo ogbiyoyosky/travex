@@ -14,7 +14,7 @@ import (
 
 type SeedData struct {
 	Users         []models.User
-	Locations     []models.TestLocation
+	Locations     []models.Location
 	LocationTypes []models.Location
 }
 
@@ -68,7 +68,7 @@ func RunSeedData() {
 			randomIndexLocationType := rand.Intn(len(locationTypeIds))
 
 			randomIndexUserId := rand.Intn(len(userIds))
-			location := models.TestLocation{Name: seed.Locations[i].Name, Location_type_id: locationTypeIds[randomIndexLocationType], Description: seed.Locations[i].Description, UserId: userIds[randomIndexUserId], Image: seed.Locations[i].Image, Address: seed.Locations[i].Address}
+			location := models.Location{Name: seed.Locations[i].Name, Location_type_id: locationTypeIds[randomIndexLocationType], Description: seed.Locations[i].Description, UserId: userIds[randomIndexUserId], Image: seed.Locations[i].Image, Address: seed.Locations[i].Address}
 			connection.DB.Create(&location)
 		}
 	}

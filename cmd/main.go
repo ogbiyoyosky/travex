@@ -17,9 +17,11 @@ func main() {
 
 	connection.Connect()
 	app := fiber.New()
+
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
+
 	routes.SetupRoutes(app)
 	// start the server
 

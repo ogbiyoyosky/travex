@@ -20,8 +20,10 @@ create table "locations" (
     "description" text NOT NULL,
     "location_type_id" uuid  NOT NULL,
     "user_id" uuid NOT NULL,
+    "is_approved" boolean NOT NULL DEFAULT FALSE,
     "created_at" timestamp DEFAULT NOW(),
     "updated_at" timestamp  DEFAULT NOW(),
+    "is_approved_at" timestamp,
     "deleted_at" timestamp
 );
 
@@ -38,19 +40,18 @@ create table "reviews" (
     "location_id" uuid NOT NULL,
     "author_id" uuid NOT NULL,
     "rating" DECIMAL NOT NULL,
+    "text" text DEFAULT NULL,
     "created_at" timestamp  DEFAULT NOW(),
     "updated_at" timestamp DEFAULT NOW(),
-    "deleted_at "timestamp
-    "comment_id" uuid DEFAULT NULL,
+    "deleted_at "timestamp,
 );
 
 create table "comments" (
     "id" uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
     "location_id" uuid NOT NULL,
     "author_id" uuid NOT NULL,
-    "parent_id" uuid DEFAULT null,
+    "review_id" uuid NOT NULL,
     "text" text NOT NULL,
-    "review_id" uuid DEFAULT NULL,
     "is_approved" boolean NOT NULL DEFAULT FALSE,
     "is_approved_by" uuid DEFAULT  NULL,
     "is_approved_at" timestamp,

@@ -2,17 +2,18 @@ package dto
 
 import (
 	"fmt"
+	"mime/multipart"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
 type CreateLocationDto struct {
-	Name         string `json:"name" validate:"required"`
-	Image        string `json:"image" validate:"required"`
-	Address      string `json:"address"  validate:"required"`
-	LocationType string `json:"locationType" validate:"required"`
-	Description  string `json:"description" validate:"required"`
+	Name         string                `json:"name" validate:"required"`
+	Image        *multipart.FileHeader `json:"image" validate:"required"`
+	Address      string                `json:"address"  validate:"required"`
+	LocationType string                `json:"locationType" validate:"required"`
+	Description  string                `json:"description" validate:"required"`
 }
 
 func CreateLocationValidator(c *fiber.Ctx) error {

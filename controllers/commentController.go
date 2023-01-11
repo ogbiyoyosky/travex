@@ -15,6 +15,7 @@ func AddComment(c *fiber.Ctx) error {
 	var data dto.CommentDto
 	userObj := c.Locals("user").(models.User)
 	var locationId = c.Params("locationId")
+	var reviewId = c.Params("reviewId")
 	var location models.Location
 
 	if err := c.BodyParser(&data); err != nil {
@@ -22,6 +23,7 @@ func AddComment(c *fiber.Ctx) error {
 	}
 
 	var comment models.Comment
+	var review models.Review
 
 	connection.DB.Model(&models.Location{
 		Id: locationId,
@@ -35,56 +37,34 @@ func AddComment(c *fiber.Ctx) error {
 		})
 	}
 
-	commentParentId := data.Parent_id
+	connection.DB.Model(&models.Review{
+		Id: reviewId,
+	}).First(&review)
 
-	if commentParentId != "" {
-		connection.DB.Model(&comment).Where("id = ?", commentParentId).First(&comment)
+	if review.Id == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "Review does not exist",
+		})
+	}
 
-		if comment.Id == "" {
+	comment = models.Comment{
+		Location_id: locationId,
+		Text:        data.Text,
+		Author_id:   userObj.Id,
+		Review_id:   reviewId,
+	}
 
-			c.Status(http.StatusNotFound)
-			return c.JSON(fiber.Map{
-				"status":  false,
-				"message": "Can not reply to a comment that does not exist",
-			})
-		}
-
-		comment = models.Comment{
-			Location_id: locationId,
-			Text:        data.Text,
-			Author_id:   userObj.Id,
-			Parent_id:   commentParentId,
-		}
-
-		if userObj.Role != "admin" {
-			connection.DB.Omit("is_approved_at", "is_approved_by").Create(&comment)
-
-		} else {
-			comment.IsApproved = true
-			comment.IsApprovedAt = time.Now()
-			comment.IsApprovedBy = userObj.Id
-
-			connection.DB.Save(&comment)
-		}
+	if userObj.Role != "admin" {
+		connection.DB.Omit("is_approved_at", "is_approved_by").Create(&comment)
 
 	} else {
-		comment = models.Comment{
-			Location_id: locationId,
-			Text:        data.Text,
-			Author_id:   userObj.Id,
-		}
+		comment.IsApproved = true
+		comment.IsApprovedAt = time.Now()
+		comment.IsApprovedBy = userObj.Id
 
-		if userObj.Role != "admin" {
-			connection.DB.Omit("is_approved_at", "is_approved_by", "parent_id").Create(&comment)
-
-		} else {
-			comment.IsApproved = true
-			comment.IsApprovedAt = time.Now()
-			comment.IsApprovedBy = userObj.Id
-
-			connection.DB.Omit("location_id, author_id", "parent_id").Save(&comment)
-		}
-
+		connection.DB.Omit("location_id, author_id", "parent_id").Save(&comment)
 	}
 
 	return c.JSON(fiber.Map{
