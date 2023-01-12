@@ -218,6 +218,69 @@ func AddLocation(c *fiber.Ctx) error {
 
 }
 
+func AddMasterAdminLocation(c *fiber.Ctx) error {
+	userObj := c.Locals("user").(models.User)
+
+	if userObj.Role != "master_admin" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "No suffcient permission",
+		})
+	}
+
+	var location models.Location
+
+	var locationType models.LocationType
+
+	connection.DB.Where("name = ? ", c.FormValue("locationType")).First(&locationType)
+
+	if c.FormValue("locationType") == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "LocationType does not exist",
+		})
+	}
+
+	fileheader, err := c.FormFile("image")
+	if err != nil {
+		panic(err)
+	}
+
+	file, err := fileheader.Open()
+
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	buffer, err := io.ReadAll(file)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fileName, err := UploadAppImage(fileheader.Filename, buffer)
+
+	location = models.Location{
+		Name:             c.FormValue("name"),
+		Image:            fileName,
+		Address:          c.FormValue("address"),
+		Location_type_id: locationType.Id,
+		Description:      c.FormValue("description"),
+		UserId:           c.FormValue("userId"),
+	}
+
+	connection.DB.Omit("is_approved", "is_approved_at").Create(&location)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Successfully created Location",
+	})
+
+}
+
 func UploadAppImage(stringifiedFileName string, fileBuff []byte) (string, error) {
 	tempDir, err := ioutil.TempDir("", "uploads")
 	if err != nil {
