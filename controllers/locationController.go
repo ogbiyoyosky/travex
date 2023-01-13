@@ -54,6 +54,42 @@ func GetLocations(c *fiber.Ctx) error {
 	})
 }
 
+func AdminGetLocations(c *fiber.Ctx) error {
+	var locations []models.Location
+	var search = c.Query("search")
+	userObj := c.Locals("user").(models.User)
+
+	if userObj.Role != "admin" {
+		c.Status(http.StatusForbidden)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "Insufficient permission",
+		})
+	}
+
+	if search != "" {
+
+		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ? ", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Reviews.Comments").Preload("Reviews.Author").Preload("LocationType").Find(&locations)
+		c.Status(http.StatusOK)
+		fmt.Println("locations", locations)
+		return c.JSON(fiber.Map{
+			"status":  true,
+			"message": "Successfully retrieved locations",
+			"data":    locations,
+		})
+	}
+
+	connection.DB.Model(&models.Location{}).Preload("Reviews.Author").Preload("User").Preload("Reviews").Preload("Reviews.Comments").Preload("Reviews.Comments.Author").Preload("LocationType").Find(&locations)
+
+	c.Status(http.StatusOK)
+
+	return c.JSON(fiber.Map{
+		"status":  true,
+		"message": "Successfully retrieved locations",
+		"data":    locations,
+	})
+}
+
 func ApproveLocation(c *fiber.Ctx) error {
 
 	var locationId = c.Params("locationId")
