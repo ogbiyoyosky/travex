@@ -30,16 +30,6 @@ func GetLocations(c *fiber.Ctx) error {
 	var locations []models.Location
 
 	var search = c.Query("search")
-	userObj := c.Locals("user").(models.User)
-
-	if userObj.Id != "" && userObj.Role != "master_admin" {
-		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ? ", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Reviews.Comments").Preload("Reviews.Author").Preload("LocationType").Find(&locations)
-		return c.JSON(fiber.Map{
-			"status":  true,
-			"message": "Successfully retrieved locations",
-			"data":    locations,
-		})
-	}
 
 	if search != "" {
 
@@ -62,30 +52,6 @@ func GetLocations(c *fiber.Ctx) error {
 		"message": "Successfully retrieved locations",
 		"data":    locations,
 	})
-}
-
-func GetAdminLocations(c *fiber.Ctx) error {
-	var locations []models.Location
-
-	var search = c.Query("search")
-	userObj := c.Locals("user").(models.User)
-
-	if userObj.Role != "master_admin" {
-		c.Status(http.StatusForbidden)
-		return c.JSON(fiber.Map{
-			"status":  false,
-			"message": "Insufficient permission",
-			"data":    nil,
-		})
-	}
-
-	connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ? ", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Reviews.Comments").Preload("Reviews.Author").Preload("LocationType").Find(&locations)
-	return c.JSON(fiber.Map{
-		"status":  true,
-		"message": "Successfully retrieved locations",
-		"data":    locations,
-	})
-
 }
 
 func ApproveLocation(c *fiber.Ctx) error {
