@@ -59,7 +59,7 @@ func AdminGetLocations(c *fiber.Ctx) error {
 	var search = c.Query("search")
 	userObj := c.Locals("user").(models.User)
 
-	if userObj.Role != "admin" {
+	if userObj.Role != "master_admin" {
 		c.Status(http.StatusForbidden)
 		return c.JSON(fiber.Map{
 			"status":  false,
