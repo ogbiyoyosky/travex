@@ -111,13 +111,13 @@ func ApproveReview(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Where("id = ? AND location_id = ?", data.ReviewId, locationId).First(&review).First(&review)
+	connection.DB.Where("id = ? AND location_id = ?", data.ReviewId, locationId).First(&review)
 
 	if review.Id == "" {
 		c.Status(http.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"status":  false,
-			"message": "Re does not exist",
+			"message": "Review does not exist",
 		})
 	}
 
