@@ -43,7 +43,7 @@ func GetLocations(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Model(&models.Location{}).Preload("Reviews.Author").Preload("User").Preload("Reviews", "is_approved = ?", true).Preload("Reviews.Comments", "is_approved = ?", true).Preload("Reviews.Comments.Author").Preload("LocationType").Find(&locations)
+	connection.DB.Model(&models.Location{}).Where("locations.is_approved is ?", true).Preload("Reviews.Author").Preload("User").Preload("Reviews", "is_approved = ?", true).Preload("Reviews.Comments", "is_approved = ?", true).Preload("Reviews.Comments.Author").Preload("LocationType").Find(&locations)
 
 	c.Status(http.StatusOK)
 
