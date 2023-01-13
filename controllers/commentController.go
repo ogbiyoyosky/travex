@@ -80,6 +80,8 @@ func ApproveComment(c *fiber.Ctx) error {
 	var commentId = c.Params("commentId")
 	var location models.Location
 
+	var data dto.ApproveCommentDto
+
 	var comment models.Comment
 
 	connection.DB.Where("id = ?", locationId).Preload("Author").First(&location)
@@ -128,9 +130,12 @@ func ApproveComment(c *fiber.Ctx) error {
 	fmt.Println(" here", userObj.Id)
 	fmt.Println(" userObj.Id", userObj.Id)
 
-	comment.IsApproved = true
-	comment.IsApprovedAt = time.Now()
-	comment.IsApprovedBy = userObj.Id
+	comment.IsApproved = data.IsApproved
+
+	if data.IsApproved {
+		comment.IsApprovedAt = time.Now()
+		comment.IsApprovedBy = userObj.Id
+	}
 
 	connection.DB.Omit("location_id, author_id", "text").Save(&comment)
 

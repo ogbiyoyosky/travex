@@ -14,6 +14,7 @@ import (
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/gofiber/fiber/v2"
 	connection "github.com/ogbiyoyosky/travex/db"
+	"github.com/ogbiyoyosky/travex/dto"
 	"github.com/ogbiyoyosky/travex/models"
 )
 
@@ -59,6 +60,12 @@ func ApproveLocation(c *fiber.Ctx) error {
 
 	var location models.Location
 
+	var data dto.ApproveLocationDto
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
 	connection.DB.Model(&models.Location{
 		Id: locationId,
 	}).First(&location)
@@ -71,8 +78,11 @@ func ApproveLocation(c *fiber.Ctx) error {
 		})
 	}
 
-	location.IsApproved = true
-	location.IsApprovedAt = time.Now()
+	location.IsApproved = data.IsApproved
+
+	if data.IsApproved {
+		location.IsApprovedAt = time.Now()
+	}
 
 	connection.DB.Omit("name, image", "address", "location_type_id", "description", "user_id").Save(&location)
 
@@ -172,7 +182,7 @@ func AddLocation(c *fiber.Ctx) error {
 
 	connection.DB.Where("name = ? ", c.FormValue("locationType")).First(&locationType)
 
-	if locationType.Id == "" {
+	if c.FormValue("locationType") == "" {
 		c.Status(http.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"status":  false,
@@ -261,7 +271,7 @@ func AddMasterAdminLocation(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	fileName, err := UploadAppImage(fileheader.Filename, buffer)
+	fileName, _ := UploadAppImage(fileheader.Filename, buffer)
 
 	location = models.Location{
 		Name:             c.FormValue("name"),

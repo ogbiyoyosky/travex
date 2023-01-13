@@ -25,6 +25,10 @@ type CreateMasterLocationDto struct {
 	UserId       string                `json:"userId" validate:"required"`
 }
 
+type ApproveLocationDto struct {
+	IsApproved bool `json:"isApproved" validate:"required"`
+}
+
 func CreateMasterValidator(c *fiber.Ctx) error {
 	var errors []*ErrorResponse
 	body := new(CreateMasterLocationDto)
@@ -50,6 +54,28 @@ func CreateMasterValidator(c *fiber.Ctx) error {
 func CreateLocationValidator(c *fiber.Ctx) error {
 	var errors []*ErrorResponse
 	body := new(CreateLocationDto)
+	c.BodyParser(&body)
+
+	err := Validator.Struct(body)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			var el ErrorResponse
+			el.Property = err.Field()
+			el.Tag = err.Tag()
+			el.Value = err.Param()
+			el.Message = fmt.Sprintf("Invalid property %s", err.Field())
+			errors = append(errors, &el)
+		}
+
+		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	}
+
+	return c.Next()
+}
+
+func ApproveLocationValidator(c *fiber.Ctx) error {
+	var errors []*ErrorResponse
+	body := new(ApproveCommentDto)
 	c.BodyParser(&body)
 
 	err := Validator.Struct(body)

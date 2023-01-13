@@ -16,8 +16,6 @@ func ValidateJwt(c *fiber.Ctx) error {
 
 	auth := c.Get("Authorization")
 
-	fmt.Println("TES " + auth)
-
 	if auth == "" {
 
 		c.Status(http.StatusUnauthorized)
@@ -25,7 +23,6 @@ func ValidateJwt(c *fiber.Ctx) error {
 			"message": "unauthorized",
 			"status":  false,
 		})
-
 	}
 
 	authArr := strings.Fields(auth)
