@@ -33,7 +33,7 @@ func GetLocations(c *fiber.Ctx) error {
 
 	if search != "" {
 
-		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ?", "%"+search+"%").Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Reviews.Comments", "is_approved = ?", true).Preload("Reviews.Author").Preload("LocationType").Find(&locations)
+		connection.DB.Model(&models.Location{}).Where("locations.name ILIKE ? AND locations.is_approved is ?", "%"+search+"%", true).Or("location_types.name LIKE ?", "%"+search+"%").Joins("JOIN location_types ON location_types.id = locations.location_type_id").Preload("User").Preload("Reviews.Comments", "is_approved = ?", true).Preload("Reviews.Author").Preload("LocationType").Find(&locations)
 		c.Status(http.StatusOK)
 		fmt.Println("locations", locations)
 		return c.JSON(fiber.Map{
