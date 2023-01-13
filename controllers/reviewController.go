@@ -92,6 +92,9 @@ func ApproveReview(c *fiber.Ctx) error {
 	var review models.Review
 
 	var data dto.ApproveReviewDto
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
 
 	connection.DB.Where("id = ?", locationId).Preload("Author").First(&location)
 
@@ -111,7 +114,7 @@ func ApproveReview(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Where("id = ?", data.ReviewId).First(&review)
+	connection.DB.Where("id = ? AND location_id = ? ", data.ReviewId, locationId).First(&review)
 
 	if review.Id == "" {
 		c.Status(http.StatusBadRequest)

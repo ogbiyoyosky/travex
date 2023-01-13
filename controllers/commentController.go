@@ -79,6 +79,10 @@ func ApproveComment(c *fiber.Ctx) error {
 
 	var data dto.ApproveCommentDto
 
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
 	var comment models.Comment
 
 	connection.DB.Where("id = ?", locationId).Preload("Author").First(&location)
