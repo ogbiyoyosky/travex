@@ -111,7 +111,7 @@ func ApproveReview(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Where("id = ? AND location_id = ?", data.ReviewId, locationId).First(&review)
+	connection.DB.Where("id = ?", data.ReviewId).First(&review)
 
 	if review.Id == "" {
 		c.Status(http.StatusBadRequest)
