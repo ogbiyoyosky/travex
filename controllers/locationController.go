@@ -145,7 +145,7 @@ func MyLocations(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Model(&models.Location{}).Preload("Comments.Author").Preload("Reviews", "is_approved = ?", false).Preload("User").Preload("Comments", "is_approved = ?", true).Preload("LocationType").Preload("Reviews.Author").Where("user_id = ?", userObj.Id).Find(&locations)
+	connection.DB.Model(&models.Location{}).Preload("Comments.Author").Preload("Reviews").Preload("User").Preload("Comments").Preload("LocationType").Preload("Reviews.Author").Where("user_id = ?", userObj.Id).Find(&locations)
 	c.Status(http.StatusOK)
 
 	return c.JSON(fiber.Map{
@@ -164,7 +164,7 @@ func GetLocation(c *fiber.Ctx) error {
 	if userObj.Role == "admin" {
 		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("User").Preload("Reviews.Comments").Preload("Reviews.Author").Preload("User").Preload("Reviews.Comments.Author").First(&location)
 	} else {
-		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Reviews", "is_approved = ?", true).Preload("Reviews.Author").Preload("User").Preload("Reviews.Comments", "is_approved = ?", false).Preload("Reviews.Comments.Author").Preload("Reviews.Author").Preload("User").First(&location)
+		connection.DB.Model(&models.Location{}).Where("id = ?", locationId).Preload("LocationType").Preload("Reviews", "is_approved = ?", true).Preload("Reviews.Author").Preload("User").Preload("Reviews.Comments", "is_approved = ?", true).Preload("Reviews.Comments.Author").Preload("Reviews.Author").Preload("User").First(&location)
 	}
 	if location.Id == "" {
 		c.Status(http.StatusBadRequest)
