@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -25,9 +24,7 @@ func AddComment(c *fiber.Ctx) error {
 	var comment models.Comment
 	var review models.Review
 
-	connection.DB.Model(&models.Location{
-		Id: locationId,
-	}).First(&location)
+	connection.DB.Where("id = ?", locationId).First(&location)
 
 	if location.Id == "" {
 		c.Status(http.StatusBadRequest)
@@ -36,7 +33,7 @@ func AddComment(c *fiber.Ctx) error {
 			"message": "Location does not exist",
 		})
 	}
-
+	connection.DB.Where("id = ?", reviewId).First(&review)
 	connection.DB.Model(&models.Review{
 		Id: reviewId,
 	}).First(&review)
@@ -120,19 +117,13 @@ func ApproveComment(c *fiber.Ctx) error {
 		})
 	}
 
-	if comment.IsApproved {
-		return c.JSON(fiber.Map{
-			"status":  false,
-			"message": "Comment Already Approved",
-		})
+	if data.IsApproved == 1 {
+		comment.IsApproved = true
+	} else {
+		comment.IsApproved = false
 	}
 
-	fmt.Println(" here", userObj.Id)
-	fmt.Println(" userObj.Id", userObj.Id)
-
-	comment.IsApproved = data.IsApproved
-
-	if data.IsApproved {
+	if data.IsApproved == 1 {
 		comment.IsApprovedAt = time.Now()
 		comment.IsApprovedBy = userObj.Id
 	}
@@ -141,6 +132,6 @@ func ApproveComment(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"status":  false,
-		"message": "Successfully Approved Comment",
+		"message": "Successfully updated Comment",
 	})
 }

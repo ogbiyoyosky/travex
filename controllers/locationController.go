@@ -102,9 +102,7 @@ func ApproveLocation(c *fiber.Ctx) error {
 		return err
 	}
 
-	connection.DB.Model(&models.Location{
-		Id: locationId,
-	}).First(&location)
+	connection.DB.Where("id = ?", locationId).First(&location)
 
 	if location.Id == "" {
 		c.Status(http.StatusBadRequest)
@@ -114,17 +112,17 @@ func ApproveLocation(c *fiber.Ctx) error {
 		})
 	}
 
-	location.IsApproved = data.IsApproved
-
-	if data.IsApproved {
-		location.IsApprovedAt = time.Now()
+	if data.IsApproved == 1 {
+		connection.DB.Model(&location).Update("is_approved", true)
+	} else {
+		connection.DB.Model(&location).Update("is_approved", false)
 	}
 
-	connection.DB.Omit("name, image", "address", "location_type_id", "description", "user_id").Save(&location)
+	fmt.Println(data.IsApproved)
 
 	return c.JSON(fiber.Map{
 		"status":  true,
-		"message": "Successfully approved location",
+		"message": "Successfully updated location",
 	})
 }
 

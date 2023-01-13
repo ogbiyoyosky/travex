@@ -12,7 +12,7 @@ type CommentDto struct {
 }
 
 type ApproveCommentDto struct {
-	IsApproved bool `json:"isApproved" validate:"required"`
+	IsApproved int `json:"isApproved" validate:"required"`
 }
 
 func CommentValidator(c *fiber.Ctx) error {
@@ -45,6 +45,8 @@ func ApproveCommentValidator(c *fiber.Ctx) error {
 	err := Validator.Struct(body)
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
+
+			fmt.Println(err.Param())
 			var el ErrorResponse
 			el.Property = err.Field()
 			el.Tag = err.Tag()

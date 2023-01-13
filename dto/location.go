@@ -26,7 +26,7 @@ type CreateMasterLocationDto struct {
 }
 
 type ApproveLocationDto struct {
-	IsApproved bool `json:"isApproved" validate:"required"`
+	IsApproved int `json:"isApproved" validate:"required"`
 }
 
 func CreateMasterValidator(c *fiber.Ctx) error {
@@ -79,6 +79,8 @@ func ApproveLocationValidator(c *fiber.Ctx) error {
 	c.BodyParser(&body)
 
 	err := Validator.Struct(body)
+
+	fmt.Print(body)
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
 			var el ErrorResponse

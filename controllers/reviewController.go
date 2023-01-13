@@ -69,7 +69,7 @@ func AddReview(c *fiber.Ctx) error {
 			Location_id: locationId,
 			Rating:      float32(data.Rating) / 10,
 			Author_id:   userObj.Id,
-			IsApproved:  false,
+			IsApproved:  true,
 		}
 
 		connection.DB.Omit("text").Save(&review)
@@ -81,4 +81,57 @@ func AddReview(c *fiber.Ctx) error {
 		"message": "You added a review for this location",
 	})
 
+}
+
+func ApproveReview(c *fiber.Ctx) error {
+	userObj := c.Locals("user").(models.User)
+	var locationId = c.Params("locationId")
+	var reviewId = c.Params("reviewId")
+
+	var location models.Location
+
+	var review models.Review
+
+	var data dto.ApproveCommentDto
+
+	connection.DB.Where("id = ?", locationId).Preload("Author").First(&location)
+
+	if location.Id == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "Location does not exist",
+		})
+	}
+
+	if location.UserId != userObj.Id {
+		c.Status(http.StatusForbidden)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "You don't have the permission to carry out this operation",
+		})
+	}
+
+	connection.DB.Where("id = ? AND location_id = ?", reviewId, locationId).First(&review).First(&review)
+
+	if review.Id == "" {
+		c.Status(http.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "Re does not exist",
+		})
+	}
+
+	if data.IsApproved == 1 {
+		review.IsApproved = true
+	} else {
+		review.IsApproved = false
+	}
+
+	connection.DB.Omit("location_id, author_id", "text").Save(&review)
+
+	return c.JSON(fiber.Map{
+		"status":  false,
+		"message": "Successfully updated Review",
+	})
 }
