@@ -22,8 +22,8 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/masteradmin/users", middleware.ValidateJwt, controller.GetUsers)
 	app.Patch("/api/locations/:locationId/approve", middleware.ValidateJwt, controller.ApproveLocation)
 	app.Post("/api/locations/:locationId/reviews", dto.ReviewValidator, middleware.ValidateJwt, controller.AddReview)
-	app.Post("/api/locations/:locationId/reviews/:reviewId/", dto.CommentValidator, middleware.ValidateJwt, controller.AddComment)
-	app.Patch("/api/locations/:locationId/reviews/:reviewId/approve", middleware.ValidateJwt, controller.ApproveReview)
-	app.Post("/api/locations/:locationId/comments/:commentId/approveReply", middleware.ValidateJwt, controller.ApproveComment)
+	app.Post("/api/locations/:locationId/reviews/addComment", dto.CommentValidator, middleware.ValidateJwt, controller.AddComment)
+	app.Patch("/api/locations/:locationId/reviews/approveReview", dto.ApproveReviewValidator, middleware.ValidateJwt, controller.ApproveReview)
+	app.Patch("/api/locations/:locationId/comments/approveReply", dto.ApproveCommentValidator, middleware.ValidateJwt, controller.ApproveComment)
 	app.Get("/api/profile", middleware.ValidateJwt, controller.GetProfile)
 }

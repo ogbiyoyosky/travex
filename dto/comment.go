@@ -8,11 +8,13 @@ import (
 )
 
 type CommentDto struct {
-	Text string `json:"text" validate:"required"`
+	Text     string `json:"text" validate:"required"`
+	ReviewId string `json:"reviewId" validate:"required"`
 }
 
 type ApproveCommentDto struct {
-	IsApproved int `json:"isApproved" validate:"required"`
+	IsApproved int    `json:"isApproved" validate:"required"`
+	CommentId  string `json:"commentId" validate:"required"`
 }
 
 func CommentValidator(c *fiber.Ctx) error {

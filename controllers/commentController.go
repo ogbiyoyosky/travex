@@ -74,7 +74,7 @@ func AddComment(c *fiber.Ctx) error {
 func ApproveComment(c *fiber.Ctx) error {
 	userObj := c.Locals("user").(models.User)
 	var locationId = c.Params("locationId")
-	var commentId = c.Params("commentId")
+
 	var location models.Location
 
 	var data dto.ApproveCommentDto
@@ -99,7 +99,7 @@ func ApproveComment(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Where("id = ? AND location_id = ?", commentId, locationId).Preload("Author").First(&comment)
+	connection.DB.Where("id = ? AND location_id = ?", data.CommentId, locationId).Preload("Author").First(&comment)
 
 	if comment.Id == "" {
 		c.Status(http.StatusBadRequest)

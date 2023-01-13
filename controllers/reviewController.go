@@ -86,13 +86,12 @@ func AddReview(c *fiber.Ctx) error {
 func ApproveReview(c *fiber.Ctx) error {
 	userObj := c.Locals("user").(models.User)
 	var locationId = c.Params("locationId")
-	var reviewId = c.Params("reviewId")
 
 	var location models.Location
 
 	var review models.Review
 
-	var data dto.ApproveCommentDto
+	var data dto.ApproveReviewDto
 
 	connection.DB.Where("id = ?", locationId).Preload("Author").First(&location)
 
@@ -112,7 +111,7 @@ func ApproveReview(c *fiber.Ctx) error {
 		})
 	}
 
-	connection.DB.Where("id = ? AND location_id = ?", reviewId, locationId).First(&review).First(&review)
+	connection.DB.Where("id = ? AND location_id = ?", data.ReviewId, locationId).First(&review).First(&review)
 
 	if review.Id == "" {
 		c.Status(http.StatusBadRequest)
