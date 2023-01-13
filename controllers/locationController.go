@@ -172,7 +172,7 @@ func AddLocation(c *fiber.Ctx) error {
 
 	connection.DB.Where("name = ? ", c.FormValue("locationType")).First(&locationType)
 
-	if c.FormValue("locationType") == "" {
+	if locationType.Id == "" {
 		c.Status(http.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"status":  false,
